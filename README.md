@@ -1,3 +1,5 @@
+keywords: 2D spatial RGB lighting controller, Linux, Arch Linux, OpenRGB, virtual canvas.
+
 Lumina Spatial Studio
 
 Lumina Spatial Studio is an open-source, highly customizable 2D spatial RGB
