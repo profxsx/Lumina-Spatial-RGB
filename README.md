@@ -68,6 +68,31 @@ directly to physical devices via an OpenRGB SDK server connection.
     the UI. The engine will cleanly restart and load your new scripts without
     requiring a terminal reboot.
 
+<p align="center">
+  <img src="media/1.png" width="700" alt="Lumina Dashboard">
+</p>
+
+<p align="center">
+  <img src="media/2.png" width="700" alt="Lumina Dashboard">
+</p>
+
+<p align="center">
+  <img src="media/3.png" width="700" alt="Lumina Dashboard">
+</p>
+
+<p align="center">
+  <img src="media/4.png" width="700" alt="Lumina Dashboard">
+</p>
+
+<p align="center">
+  <img src="media/5.png" width="700" alt="Lumina Dashboard">
+</p>
+
+<p align="center">
+  <img src="media/6.png" width="700" alt="Lumina Dashboard">
+</p>
+
+
 🛠️ Installation & Setup
 
 Prerequisites
