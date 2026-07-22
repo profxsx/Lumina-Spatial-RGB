@@ -1,0 +1,21 @@
+# Python build artifacts and cache
+__pycache__/
+*.pyc
+.venv/
+venv/
+build/
+dist/
+*.spec
+config.json
+
+# Node / Javascript
+node_modules/
+.npm/
+
+# Rust / Tauri compilation target
+src-tauri/target/
+src-tauri/binaries/*
+!src-tauri/binaries/.gitkeep
+
+# Dynamically generated assets
+frontend/
