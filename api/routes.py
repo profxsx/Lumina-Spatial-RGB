@@ -374,6 +374,22 @@ def delete_named_profile(device_id: str, profile_name: str):
             return {"status": "ok"}
     raise HTTPException(status_code=404, detail="Device not found")
 
+import subprocess
+
+@router.post("/api/open-dir/{folder_name}")
+def open_directory_in_file_manager(folder_name: str):
+    """Launches the standard Linux file manager pointing to the active effects/plugins folders."""
+    # Since we use os.chdir(lumina_dir) on startup, relative paths automatically
+    # map to write-enabled system folders (~/.config/lumina/effects etc.)
+    target_path = os.path.abspath(f"./{folder_name}")
+    os.makedirs(target_path, exist_ok=True)
+    
+    try:
+        # Launch default file manager using standard xdg-open
+        subprocess.Popen(["xdg-open", target_path])
+        return {"status": "ok"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to open directory: {e}")
 
 async def ws_canvas_frame(websocket: WebSocket):
     await websocket.accept()

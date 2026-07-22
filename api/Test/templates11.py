@@ -77,8 +77,8 @@ INDEX_HTML = r'''
     </head>
     <body class="h-screen w-screen overflow-hidden flex flex-col font-sans select-none relative">
 
-        <!-- Header -->
-        <header class="h-16 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6 z-10 select-none">
+        <!-- Header (Custom Window Titlebar) -->
+        <header id="titlebar" class="h-16 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-6 z-10 select-none cursor-default">
             <div class="flex items-center gap-3">
                 <div class="h-8 w-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center animate-pulse">
                     <i class="fa-solid fa-wand-magic-sparkles text-slate-950 text-sm"></i>
@@ -108,8 +108,22 @@ INDEX_HTML = r'''
                 </button>
             </nav>
 
-            <div class="flex items-center gap-2 text-xs font-mono">
+            <!-- Status Indicator & Window Actions Cluster -->
+            <div class="flex items-center gap-4 text-xs font-mono">
                 <span id="active-fps-display" class="text-slate-500">Connecting to Core...</span>
+                
+                <!-- Modern Frameless Custom Controls -->
+                <div class="flex items-center gap-3 border-l border-slate-800 pl-4">
+                    <button onclick="minimizeWindow()" class="text-slate-400 hover:text-cyan-400 transition-colors py-1 cursor-pointer" title="Minimize Window">
+                        <i class="fa-solid fa-minus text-xs"></i>
+                    </button>
+                    <button onclick="maximizeWindow()" class="text-slate-400 hover:text-cyan-400 transition-colors py-1 cursor-pointer" title="Maximize Window">
+                        <i class="fa-solid fa-expand text-xs"></i>
+                    </button>
+                    <button onclick="closeWindow()" class="text-slate-400 hover:text-pink-500 transition-colors py-1 cursor-pointer" title="Close / Hide to Tray">
+                        <i class="fa-solid fa-xmark text-sm font-bold"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -261,14 +275,9 @@ INDEX_HTML = r'''
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center justify-between text-xs font-mono tracking-widest uppercase text-slate-400">
                             <span>Effect Controls</span>
-                            <div class="flex gap-2">
-                                <button onclick="restartEngine()" class="px-2 py-1 border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 font-mono text-[9px] rounded transition-all" title="Reload Engine & Re-scan Effects">
-                                    <i class="fa-solid fa-rotate"></i> Reload
-                                </button>
-                                <button onclick="openDirectory('effects')" class="px-2 py-1 border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 font-mono text-[9px] rounded transition-all" title="Open Effects Directory">
-                                    <i class="fa-solid fa-folder-open"></i> Open Dir
-                                </button>
-                            </div>
+                            <button onclick="openDirectory('effects')" class="px-2 py-1 border border-cyan-500/20 bg-cyan-500/5 hover:bg-cyan-500 hover:text-slate-950 text-cyan-400 font-mono text-[9px] rounded transition-all" title="Open Effects Directory">
+                                <i class="fa-solid fa-folder-open"></i> Open Dir
+                            </button>
                         </div>
                         <div class="glass-panel p-4 rounded-xl border border-slate-900 flex flex-col gap-4">
                             <div class="flex items-center gap-2 border-b border-slate-900 pb-2">
@@ -302,14 +311,9 @@ INDEX_HTML = r'''
                     <div class="flex flex-col gap-4">
                         <div class="flex items-center justify-between text-xs font-mono tracking-widest uppercase text-slate-400">
                             <span>Plugin Settings</span>
-                            <div class="flex gap-2">
-                                <button onclick="restartEngine()" class="px-2 py-1 border border-pink-500/20 bg-pink-500/5 hover:bg-pink-500 hover:text-slate-950 text-pink-500 font-mono text-[9px] rounded transition-all" title="Reload Engine & Re-scan Plugins">
-                                    <i class="fa-solid fa-rotate"></i> Reload
-                                </button>
-                                <button onclick="openDirectory('plugins')" class="px-2 py-1 border border-pink-500/20 bg-pink-500/5 hover:bg-pink-500 hover:text-slate-950 text-pink-500 font-mono text-[9px] rounded transition-all" title="Open Plugins Directory">
-                                    <i class="fa-solid fa-folder-open"></i> Open Dir
-                                </button>
-                            </div>
+                            <button onclick="openDirectory('plugins')" class="px-2 py-1 border border-pink-500/20 bg-pink-500/5 hover:bg-pink-500 hover:text-slate-950 text-pink-500 font-mono text-[9px] rounded transition-all" title="Open Plugins Directory">
+                                <i class="fa-solid fa-folder-open"></i> Open Dir
+                            </button>
                         </div>
                         <div class="glass-panel p-4 rounded-xl border border-slate-900 flex flex-col gap-4">
                             <div class="flex items-center gap-2 border-b border-slate-900 pb-2">
@@ -560,7 +564,7 @@ INDEX_HTML = r'''
                                 <label class="text-slate-400">GRID DIVISIONS</label>
                                 <span id="cal-val-divisions" class="text-cyan-400 font-bold">16</span>
                             </div>
-                            <input type="range" id="cal-setting-divisions" min="4" max="100" step="2" value="16" class="w-full" oninput="onCalDivisionsChange(this.value)">
+                            <input type="range" id="cal-setting-divisions" min="4" max="100" step="2" value="16" class="w-full" oninput="onCalDivisionsChange(val)">
                         </div>
                     </div>
                     
@@ -597,6 +601,13 @@ INDEX_HTML = r'''
                     Save Mapping & Close
                 </button>
             </div>
+        </div>
+
+        <!-- Custom Frame Resize Handle -->
+        <div id="window-resize-handle" class="absolute bottom-0 right-0 h-4 w-4 cursor-se-resize z-50 flex items-end justify-end p-0.5" onmousedown="onResizeHandleMouseDown(event)">
+            <svg class="h-3 w-3 text-slate-600 hover:text-cyan-400" viewBox="0 0 10 10" fill="currentColor">
+                <path d="M10,0 L0,10 L10,10 Z" />
+            </svg>
         </div>
 
         <script>
@@ -661,7 +672,7 @@ INDEX_HTML = r'''
                 
                 while (true) {
                     try {
-                        const res = await fetch("/api/config");
+                        const res = await fetch("http://127.0.0.1:8000/api/config");
                         if (res.ok) {
                             break; // Backend is active!
                         }
@@ -690,23 +701,80 @@ INDEX_HTML = r'''
                 await fetch(`/api/open-dir/${folderName}`, { method: "POST" });
             }
 
-            // --- Reload Core Engine ---
-            async function restartEngine() {
-                const statusDisplay = document.getElementById("active-fps-display");
-                if (statusDisplay) statusDisplay.textContent = "Restarting...";
-                
-                try {
-                    await fetch("/api/engine/restart", { method: "POST" });
-                } catch (e) {
-                    console.error("Failed restarting engine:", e);
+            // --- Native Tauri v2 Titlebar Bridges ---
+            function minimizeWindow() {
+                if (window.__TAURI__) {
+                    window.__TAURI__.core.invoke('minimize_window');
                 }
-                
-                // Wait 1.5 seconds for Uvicorn and engine threads to re-instantiate, then pull configuration
-                setTimeout(async () => {
-                    await init();
-                    if (statusDisplay) statusDisplay.textContent = "Connected";
-                }, 1500);
             }
+            function maximizeWindow() {
+                if (window.__TAURI__) {
+                    window.__TAURI__.core.invoke('maximize_window');
+                }
+            }
+            function closeWindow() {
+                if (window.__TAURI__) {
+                    window.__TAURI__.core.invoke('close_window');
+                }
+            }
+
+            // --- Drag & Resize Window Manual Handlers ---
+            let isDragging = false;
+            let startMouseX = 0;
+            let startMouseY = 0;
+
+            function startTauriDrag() {
+                if (window.__TAURI__) {
+                    const webviewWin = window.__TAURI__.webviewWindow;
+                    if (webviewWin) {
+                        webviewWin.getCurrentWebviewWindow().startDragging();
+                    } else if (window.__TAURI__.window) {
+                        window.__TAURI__.window.getCurrentWindow().startDragging();
+                    }
+                }
+            }
+
+            // Custom manual resize dragging
+            let isResizing = false;
+            let startResizeX = 0;
+            let startResizeY = 0;
+
+            function onResizeHandleMouseDown(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                isResizing = true;
+                startResizeX = e.screenX;
+                startResizeY = e.screenY;
+                document.addEventListener('mousemove', onResizeHandleMouseMove);
+                document.addEventListener('mouseup', onResizeHandleMouseUp);
+            }
+
+            function onResizeHandleMouseMove(e) {
+                if (!isResizing) return;
+                const dx = e.screenX - startResizeX;
+                const dy = e.screenY - startResizeY;
+                if (dx !== 0 || dy !== 0) {
+                    startResizeX = e.screenX;
+                    startResizeY = e.screenY;
+                    if (window.__TAURI__) {
+                        window.__TAURI__.core.invoke('resize_window', { dx, dy });
+                    }
+                }
+            }
+
+            function onResizeHandleMouseUp() {
+                isResizing = false;
+                document.removeEventListener('mousemove', onResizeHandleMouseMove);
+                document.removeEventListener('mouseup', onResizeHandleMouseUp);
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('titlebar')?.addEventListener('mousedown', (e) => {
+                    if (e.buttons === 1 && !e.target.closest('button') && !e.target.closest('nav') && !e.target.closest('input') && !e.target.closest('select')) {
+                        startTauriDrag();
+                    }
+                });
+            });
 
             // --- Navigation / Tab Controller ---
             function switchTab(tabId) {
@@ -1081,10 +1149,10 @@ INDEX_HTML = r'''
                             }
                             innerHTML += `</div>`;
                         } else if (dev.form_type.startsWith("STRIMER")) {
-                            const num_lines = dev.form_type === "STRIMER_24PIN" ? 12 : 8;
+                            const numLines = dev.form_type === "STRIMER_24PIN" ? 12 : 8;
                             innerHTML = `<div class="flex h-[86%] w-full justify-around p-1.5 bg-slate-950/90 rounded border border-slate-800/60 overflow-hidden shadow-inner">`;
-                            for (let l = 0; l < num_lines; l++) {
-                                const ledsPerLine = Math.floor(dev.led_count / num_lines);
+                            for (let l = 0; l < numLines; l++) {
+                                const ledsPerLine = Math.floor(dev.led_count / numLines);
                                 innerHTML += `<div class="flex flex-col h-full justify-around items-center flex-1 border-r border-slate-800/10 last:border-r-0">`;
                                 for (let i = 0; i < ledsPerLine; i++) {
                                     const ledIdx = l * ledsPerLine + i;
@@ -1510,7 +1578,7 @@ INDEX_HTML = r'''
                         wrap.innerHTML = `
                             <div class="flex justify-between text-[11px] font-mono">
                                 <span class="text-slate-400">${field.label}</span>
-                                <span class="text-cyan-400 font-bold" id="p-val-${key}">${val}</span>
+                                <span class="text-cyan-400 font-bold" id="val-${key}">${val}</span>
                             </div>
                             <input type="range" min="${field.min}" max="${field.max}" step="${field.step}" value="${val}"
                                 oninput="updateParamValue('${key}', this.value)" 
@@ -1819,28 +1887,13 @@ INDEX_HTML = r'''
 
                 renderCalLedList();
                 renderCalWorkspace();
-                
-                // Populate the shape library list
-                renderShapeLibraryList();
 
                 document.getElementById("calibration-modal").style.display = "flex";
             }
 
-            function toggleCalibrationGridLock() {
-                calGridLockEnabled = !calGridLockEnabled;
-                updateCalGridLockUI();
-                renderCalWorkspace();
-            }
-
-            function updateCalGridLockUI() {
-                const btn = document.getElementById("cal-grid-lock-btn");
-                if (calGridLockEnabled) {
-                    btn.className = "text-cyan-400 text-lg";
-                    btn.innerHTML = '<i class="fa-solid fa-toggle-on"></i>';
-                } else {
-                    btn.className = "text-slate-600 text-lg";
-                    btn.innerHTML = '<i class="fa-solid fa-toggle-off"></i>';
-                }
+            // --- Window controls toggle ---
+            function toggleCalibrationWindowControls() {
+                // unused placeholder
             }
 
             function onCalDivisionsChange(val) {
@@ -1897,6 +1950,7 @@ INDEX_HTML = r'''
                 renderCalWorkspace();
             }
 
+            // --- Coordinate and vector calculators ---
             function updateCalNodeCoordsFromInput(ledIndex, axis, val) {
                 let parsed = parseFloat(val);
                 if (isNaN(parsed)) parsed = 0.0;
@@ -2062,6 +2116,12 @@ INDEX_HTML = r'''
             function onShapeLibrarySearch(val) {
                 calShapeLibrarySearchQuery = val;
                 renderShapeLibraryList();
+            }
+
+            // --- GIF Library search & filters ---
+            function onGifSearch(val) {
+                gifSearchQuery = val;
+                renderGifLibraryList();
             }
 
             function filterShapeLibrary(category) {
