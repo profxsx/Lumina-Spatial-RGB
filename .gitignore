@@ -19,3 +19,7 @@ src-tauri/binaries/*
 
 # Dynamically generated assets
 frontend/
+
+# Ignore all custom user GIFs to avoid copyright/bloat issues, except the default template
+gifs/*
+!gifs/target.gif
