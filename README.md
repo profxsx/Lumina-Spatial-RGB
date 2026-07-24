@@ -143,12 +143,19 @@ straightforward:
 ToDo list
 
 Govee plugin
+(Lan,Ble,Api)
+Lan Works The best
 
 Better UI
 
 Make it open as app with the ability to open it through web ui in the settings
 
 More effects
+
+Scenes Tab
+
+Discover Devices Tab
+(Govee For now)
 
   👥 Contributors
 
