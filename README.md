@@ -139,8 +139,15 @@ straightforward:
 3.  Drop your custom .py effect file into that folder.
 4.  Click the Reload button in your browser sidebar. The backend will re-scan
     the folder and list your new custom effect instantly.
+    
+ToDo list
 
-👥 Contributors
+Govee plugin
+Better UI
+Make it open as app with the ability to open it through web ui in the settings
+More effects
+
+  👥 Contributors
 
   - @profxsx (profxsx) — Lead Developer & Architect
   - Google AI Studio (Gemini) — AI Co-Engineer & Assistant Architect
