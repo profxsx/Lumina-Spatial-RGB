@@ -143,8 +143,11 @@ straightforward:
 ToDo list
 
 Govee plugin
+
 Better UI
+
 Make it open as app with the ability to open it through web ui in the settings
+
 More effects
 
   👥 Contributors
